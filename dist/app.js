@@ -566,9 +566,10 @@ function renderVm(raw) {
     storageProfile = {},
     osProfile = {},
     networkProfile = {},
-    tags = {},
+    tags: rawTags,
     provisioningState,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers
@@ -663,8 +664,9 @@ function renderVnet(raw) {
     dnsServers = [],
     ddosProtectionPlan,
     virtualNetworkPeerings = [],
-    tags = {},
+    tags: rawTags,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers
@@ -767,7 +769,6 @@ window.showSubnetDetail = function (encoded) {
 // le modal "detail-modal" et affiche ce dernier via MicroModal.
 // -----------------------------------------------------------------------------
 
-
 // ---------------------------------------------------------------------------
 // Table de correspondance « type → renderer »
 // ---------------------------------------------------------------------------
@@ -814,7 +815,6 @@ window.showDetail = showDetail;
 // Conserve tout l'algorithme de ton prototype initial, mais déplacé dans ce
 // module ES, pour garder la page index.html épurée.
 // -----------------------------------------------------------------------------
-
 
 // ---------------------------------------------------------------------------
 // Constantes & variables globales (limitées au module)

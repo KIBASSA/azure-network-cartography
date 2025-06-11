@@ -111,6 +111,15 @@ width: 6px;
 background: #475569; 
 border-radius: 3px;
 }
-.modal\_\_content::-webkit-scrollbar-track {
-background: transparent;
+.modal__content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Hide MicroModal dialogs by default */
+.modal {
+  display: none;
+}
+
+.modal.is-open {
+  display: block;
 }
