@@ -1,0 +1,116 @@
+
+.component-title {
+color: #ffffff;               /* text-white */
+font-size: 1.25rem;           /* text-xl */
+font-weight: 600;             /* font-semibold */
+margin-bottom: 0.75rem;       /* mb-3 */
+}
+@media (min-width: 768px) {      /* md: breakpoint */
+.component-title { font-size: 1.5rem; } /* md\:text-2xl \*/
+}
+
+.section-title {
+color: #ffffff;               
+font-size: 1rem;              /* text-base */
+font-weight: 500;             /* font-medium */
+}
+@media (min-width: 768px) {
+.section-title { font-size: 1.125rem; } /* md\:text-lg \*/
+}
+
+
+.stats-bar {
+display: flex;
+flex-wrap: wrap;
+justify-content: space-around;
+gap: 1rem;                    /* gap-4 */
+margin: 1rem 0;               /* my-4 \*/
+}
+
+.stat-item {
+background: rgba(255, 255, 255, 0.1);   
+border-radius: 0.75rem;                 /* rounded-xl */
+padding: 0.75rem 1rem;                  /* py-3 px-4 */
+min-width: 110px;                       /* équiv. w-28 \*/
+text-align: center;
+backdrop-filter: blur(6px);
+transition: transform 0.2s ease;
+}
+
+.stat-item\:hover {
+transform: translateY(-2px) scale(1.02);
+}
+
+.stat-number {
+display: block;
+color: #ffffff;
+font-size: 1.5rem;            
+font-weight: 700;             /* font-bold */
+}
+@media (min-width: 768px) {
+.stat-number { font-size: 1.875rem; }   /* md\:text-3xl \*/
+}
+
+
+.rule-section {
+margin-bottom: 1rem;          /* mb-4 \*/
+}
+
+.rule-item {
+border-radius: 0.5rem;        
+padding: 0.75rem;             /* p-3 */
+margin: 0.5rem 0;             /* my-2 */
+font-size: 0.875rem;          /* text-sm */
+color: #ffffff;
+cursor: pointer;
+user-select: none;
+box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);  /* shadow-md \*/
+backdrop-filter: blur(6px);
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.rule-item.allow {
+background: linear-gradient(135deg, #00b894 0%, #00a085 100%);
+}
+
+.rule-item.deny {
+background: linear-gradient(135deg, #e17055 0%, #d63031 100%);
+}
+
+.rule-item\:hover {
+transform: translateX(4px);
+box-shadow: 0 6px 12px rgba(0, 0, 0, 0.35);
+}
+
+
+.subnet-item,
+.nic-item,
+.peering-item {
+background: rgba(255, 255, 255, 0.1);
+border-radius: 0.5rem;
+padding: 0.25rem 0.75rem;     /* py-1 px-3 */
+font-size: 0.875rem;          
+color: #ffffff;
+cursor: pointer;
+box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+backdrop-filter: blur(6px);
+transition: transform 0.2s ease;
+}
+
+.subnet-item\:hover,
+.nic-item\:hover,
+.peering-item\:hover {
+transform: scale(1.05);
+}
+
+
+.modal\_\_content::-webkit-scrollbar {
+width: 6px;
+}
+.modal\_\_content::-webkit-scrollbar-thumb {
+background: #475569; 
+border-radius: 3px;
+}
+.modal\_\_content::-webkit-scrollbar-track {
+background: transparent;
+}
