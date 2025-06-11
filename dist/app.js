@@ -767,7 +767,6 @@ window.showSubnetDetail = function (encoded) {
 // le modal "detail-modal" et affiche ce dernier via MicroModal.
 // -----------------------------------------------------------------------------
 
-
 // ---------------------------------------------------------------------------
 // Table de correspondance « type → renderer »
 // ---------------------------------------------------------------------------
@@ -814,7 +813,6 @@ window.showDetail = showDetail;
 // Conserve tout l'algorithme de ton prototype initial, mais déplacé dans ce
 // module ES, pour garder la page index.html épurée.
 // -----------------------------------------------------------------------------
-
 
 // ---------------------------------------------------------------------------
 // Constantes & variables globales (limitées au module)

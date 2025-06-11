@@ -13,9 +13,10 @@ const files = [
 let output = '(function(){\n';
 for (const file of files) {
   let code = fs.readFileSync(file, 'utf8');
-  // Remove import lines
-  code = code.replace(/^import.*\n/gm, '');
-  // Replace "export function" with "function"
+  // Remove ES module imports/exports for bundling
+  code = code.replace(/^\s*import.*\n/gm, '');
+  code = code.replace(/^\s*export\s+\{.*\}\s*;?\n/gm, '');
+  // Replace named exports with plain functions
   code = code.replace(/export\s+function/g, 'function');
   output += '\n// --- ' + path.basename(file) + ' ---\n';
   output += code.trim() + '\n';
