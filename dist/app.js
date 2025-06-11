@@ -566,9 +566,10 @@ function renderVm(raw) {
     storageProfile = {},
     osProfile = {},
     networkProfile = {},
-    tags = {},
+    tags: rawTags,
     provisioningState,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers
@@ -663,8 +664,9 @@ function renderVnet(raw) {
     dnsServers = [],
     ddosProtectionPlan,
     virtualNetworkPeerings = [],
-    tags = {},
+    tags: rawTags,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers

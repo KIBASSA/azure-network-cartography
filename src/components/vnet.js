@@ -13,8 +13,9 @@ export function renderVnet(raw) {
     dnsServers = [],
     ddosProtectionPlan,
     virtualNetworkPeerings = [],
-    tags = {},
+    tags: rawTags,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers

@@ -12,9 +12,10 @@ export function renderVm(raw) {
     storageProfile = {},
     osProfile = {},
     networkProfile = {},
-    tags = {},
+    tags: rawTags,
     provisioningState,
   } = raw;
+  const tags = rawTags || {};
 
   // ---------------------------------------------------------------------------
   // Helpers
