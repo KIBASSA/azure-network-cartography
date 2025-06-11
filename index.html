@@ -1,0 +1,213 @@
+<!-- index.html - Point d'entrée principal de l'application Azure Network Cartography -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Azure Network Cartography</title>
+
+    <!-- —— Tailwind CDN pour le style utilitaire —— -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- —— Styles spécifiques aux composants (glassy / gradient) —— -->
+    <link rel="stylesheet" href="./styles/components.css" />
+
+    <!-- —— CSS minimal « plein‑écran » pour le canvas Cytoscape —— -->
+    <style>
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
+      /* Le conteneur Cytoscape occupe tout l'espace sous le header (4 rem) */
+      #cy {
+        height: calc(100% - 4rem);
+      }
+    </style>
+
+    <!-- —— Cytoscape.js + layout fcose —— -->
+    <script src="https://unpkg.com/cytoscape@3.26.1/dist/cytoscape.min.js"></script>
+    <script src="https://unpkg.com/cytoscape-fcose@2.3.2/cytoscape-fcose.js"></script>
+    <script>
+      // Activation conditionnelle du plugin lorsque les bundles sont chargés
+      if (window.cytoscape && window.cytoscapeFcose) {
+        cytoscape.use(window.cytoscapeFcose);
+      }
+    </script>
+
+    <!-- —— MicroModal pour les popups —— -->
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+  </head>
+
+  <body class="bg-slate-900 text-slate-100 flex flex-col">
+    <!-- ░░░ Header ░░░ -->
+    <header
+      class="p-4 bg-slate-800 flex items-center gap-4 shadow-lg z-10"
+    >
+      <h1 class="text-2xl font-bold flex-1">🌐 Azure Network Cartography</h1>
+
+      <button
+        id="legendBtn"
+        class="px-4 py-2 bg-slate-700 hover:bg-slate-600 rounded-lg text-sm"
+      >
+        ℹ️ Légende
+      </button>
+
+      <input
+        id="fileInput"
+        type="file"
+        accept="application/json"
+        class="file:ml-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-500"
+      />
+    </header>
+
+    <!-- ░░░ Viewport du graphe ░░░ -->
+    <main id="cy" class="w-full"></main>
+
+    <!-- ░░░ Modal Détails ░░░ -->
+    <div class="modal micromodal-slide" id="detail-modal" aria-hidden="true">
+      <div
+        class="modal__overlay fixed inset-0 flex items-center justify-center bg-black/60"
+        data-micromodal-close
+      >
+        <div
+          class="modal__container bg-slate-800 rounded-2xl p-6 max-w-3xl w-full mx-4 shadow-2xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="detail-title"
+        >
+          <header class="modal__header flex justify-between items-center mb-4">
+            <h2 id="detail-title" class="text-xl font-bold">Details</h2>
+            <button
+              class="text-slate-400 hover:text-white"
+              data-micromodal-close
+              aria-label="Close"
+            >
+              ✖
+            </button>
+          </header>
+          <div
+            id="modal-content"
+            class="modal__content max-h-[60vh] overflow-y-auto"
+          ></div>
+          <footer class="modal__footer mt-6 text-right">
+            <button
+              class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded text-white"
+              data-micromodal-close
+            >
+              Close
+            </button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- ░░░ Modal Légende ░░░ -->
+    <div class="modal micromodal-slide" id="legend-modal" aria-hidden="true">
+      <div
+        class="modal__overlay fixed inset-0 flex items-center justify-center bg-black/60"
+        data-micromodal-close
+      >
+        <div
+          class="modal__container bg-slate-800 rounded-2xl p-6 max-w-4xl w-full mx-4 shadow-2xl"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="legend-title"
+        >
+          <header class="modal__header flex justify-between items-center mb-4">
+            <h2 id="legend-title" class="text-xl font-bold">
+              Légende & natures des ressources
+            </h2>
+            <button
+              class="text-slate-400 hover:text-white"
+              data-micromodal-close
+              aria-label="Close"
+            >
+              ✖
+            </button>
+          </header>
+
+          <!-- Contenu statique de la légende (identique à l'original) -->
+          <div class="modal__content max-h-[70vh] overflow-y-auto">
+            <table class="w-full text-sm table-fixed border-collapse">
+              <thead class="text-slate-300 border-b border-slate-700">
+                <tr>
+                  <th class="w-24 py-2">Icône</th>
+                  <th class="w-52 py-2">Catégorie Azure</th>
+                  <th class="py-2">Rôle</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-700">
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span class="inline-block w-4 h-4 rounded-full bg-[#6366f1]"></span>
+                  </td>
+                  <td class="py-2 font-semibold">Virtual Network (VNet)</td>
+                  <td class="py-2">Périmètre réseau principal, plage IP globale.</td>
+                </tr>
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span class="inline-block w-4 h-4 rounded-full bg-[#22d3ee]"></span>
+                  </td>
+                  <td class="py-2 font-semibold">Subnet</td>
+                  <td class="py-2">Segment du VNet (plage IP + règles).</td>
+                </tr>
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span class="inline-block w-4 h-4 rotate-45 bg-[#ef4444]"></span>
+                  </td>
+                  <td class="py-2 font-semibold">Network Security Group (NSG)</td>
+                  <td class="py-2">Pare‑feu L3/L4 : règles Allow/Deny.</td>
+                </tr>
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span
+                      class="inline-block w-0 h-0 border-l-8 border-r-8 border-b-[14px] border-transparent border-b-[#facc15]"
+                    ></span>
+                  </td>
+                  <td class="py-2 font-semibold">Public IP (PIP)</td>
+                  <td class="py-2">Adresse routable depuis Internet.</td>
+                </tr>
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span
+                      class="inline-block w-4 h-4 bg-[#a855f7]"
+                      style="clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)"
+                    ></span>
+                  </td>
+                  <td class="py-2 font-semibold">Network Interface (NIC)</td>
+                  <td class="py-2">Carte réseau virtuelle, porte l’IP.</td>
+                </tr>
+                <tr class="hover:bg-slate-700/30">
+                  <td class="py-2 flex justify-center">
+                    <span class="inline-block w-4 h-4 bg-[#4ade80]"></span>
+                  </td>
+                  <td class="py-2 font-semibold">Virtual Machine (VM)</td>
+                  <td class="py-2">Instance compute.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <footer class="modal__footer mt-6 text-right">
+            <button
+              class="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 rounded text-white"
+              data-micromodal-close
+            >
+              Fermer
+            </button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <!-- ░░░ Scripts applicatifs (ES modules) ░░░ -->
+    <script type="module" src="./scripts/graph-builder.js"></script>
+    <script type="module" src="./scripts/detail-renderer.js"></script>
+
+    <!-- —— Initialisation des modales —— -->
+    <script>
+      MicroModal.init({ disableScroll: true, awaitCloseAnimation: true });
+    </script>
+  </body>
+</html>
